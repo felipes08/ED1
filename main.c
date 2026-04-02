@@ -244,6 +244,7 @@ LinkedList *LinkedList_append(LinkedList *L1, LinkedList *L2)
 }
 
 //NÃO TERMINEI
+//O COMMIT DEU CERTO
 
 //LinkedList *LinkedList_concatena(LinkedList *L1, LinkedList *L2)
 //{
