@@ -58,15 +58,21 @@ void LinkedList_add_first(LinkedList *L, int val) {
 
 
 void LinkedList_print(LinkedList *L) {
-    Node *p = L->begin;
     printf("L -> ");
     // enquanto p n�o chegou ao fim da lista, isto �,
     // enquanto p estiver apontando para um n� da lista
 
-    while (p != NULL) {
-        printf("%d -> ", p->val);
-        p = p->next;
+    if(L != NULL)
+    {
+        Node *p = L->begin;
+        while (p != NULL)
+        {
+            printf("%d -> ", p->val);
+            p = p->next;
+        }
     }
+
+
     printf(" NULL  \n");
 }
 
@@ -255,14 +261,49 @@ LinkedList *LinkedList_concatena(LinkedList *L1, LinkedList *L2)
 }
 
 void LinkedList_transforma(LinkedList *L1, LinkedList *L2, LinkedList *L3)
+
 {
+
     L3->begin = L1->begin;
     L1->end->next = L2->begin;
     L3->end = L2->end;
+    L3->end->next = NULL;
     L3->contador = L1->contador + L2->contador;
-    L1 = NULL;
-    L2 = NULL;
+    free(L1);
+    free(L2);
+
 }
+
+//void LinkedList_transforma(LinkedList *L1, LinkedList *L2, LinkedList *L3)
+//{
+//    // 1. Verificação de segurança: se L1 está vazia
+//    if (L1->begin == NULL) {
+//        L3->begin = L2->begin;
+//        L3->end = L2->end;
+//        L3->contador = L2->contador;
+//    }
+//    // 2. Se L2 está vazia
+//    else if (L2->begin == NULL) {
+//        L3->begin = L1->begin;
+//        L3->end = L1->end;
+//        L3->contador = L1->contador;
+//    }
+//    // 3. Ambas têm elementos: Conecta o fim de uma no início da outra
+//    else {
+//        L3->begin = L1->begin;
+//        L1->end->next = L2->begin;
+//        L3->end = L2->end;
+//        L3->end->next = NULL;
+//        L3->contador = L1->contador + L2->contador;
+//    }
+//
+//    // 4. Libera a estrutura de controle (as "caixas"), mas não os nós!
+//    free(L1);
+//    free(L2);
+//
+//    // IMPORTANTE: Na main, você deve fazer La = NULL; Lb = NULL;
+//    // após chamar essa função para evitar acidentes.
+//}
 
 
 
@@ -342,6 +383,8 @@ int main (){
     printf("Lista B: ");
     LinkedList_print(Lb);
     LinkedList_transforma(La, Lb, Lc);
+    La = NULL;
+    Lb = NULL;
 
     printf("\nLista C: ");
     LinkedList_print(Lc);
