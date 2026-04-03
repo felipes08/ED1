@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <locale.h>
 
 typedef struct _node {
     int val;
@@ -63,7 +64,7 @@ void LinkedList_print(LinkedList *L) {
     // enquanto p estiver apontando para um n� da lista
 
     while (p != NULL) {
-        printf("%d ->", p->val);
+        printf("%d -> ", p->val);
         p = p->next;
     }
     printf(" NULL  \n");
@@ -243,76 +244,123 @@ LinkedList *LinkedList_append(LinkedList *L1, LinkedList *L2)
 
 }
 
-//NÃO TERMINEI
-//O COMMIT DEU CERTO
 
-//LinkedList *LinkedList_concatena(LinkedList *L1, LinkedList *L2)
-//{
-//    Node *p = L2->begin;
-//
-//    LinkedList *L3 = LinkedList_create();
-//    Linked_copia(L1, L3);
-//    LinkedList_append
-//}
+
+LinkedList *LinkedList_concatena(LinkedList *L1, LinkedList *L2)
+{
+    LinkedList *L3 = LinkedList_create();
+    Linked_copia(L1, L3);
+    LinkedList_append(L3, L2);
+    return L3;
+}
+
+void LinkedList_transforma(LinkedList *L1, LinkedList *L2, LinkedList *L3)
+{
+    L3->begin = L1->begin;
+    L1->end->next = L2->begin;
+    L3->end = L2->end;
+    L3->contador = L1->contador + L2->contador;
+    L1 = NULL;
+    L2 = NULL;
+}
 
 
 
 
 int main (){
 
-    LinkedList *La = LinkedList_create();
-    LinkedList *Lb = LinkedList_create();
-    LinkedList *Lc = LinkedList_create();
+    setlocale(LC_ALL, "Portuguese");
 
+    //criação das listas
+    LinkedList *La = LinkedList_create();  //lista(A)
+    LinkedList *Lb = LinkedList_create();  //lista02
+    LinkedList *Lc = LinkedList_create();  //lista03
+
+    //adicionando elementos na primeira posição da lista(A)
     LinkedList_add_first(La,5);
     LinkedList_add_first(La,4);
     LinkedList_add_first(La,2);
     LinkedList_add_first(La,10);
     LinkedList_add_first(La,20);
 
+    //adicionando um elemento no final da lista(A)
     LinkedList_add_last(La, 15);
 
+    //imprimindo a lista(A) na tela
+    printf("Lista A: \n");
     LinkedList_print(La);
     printf("elemento 1 = %d\n", LinkedList_PrintBegin(La));
     printf("elemento %d = %d\n", La->contador, LinkedList_PrintEnd(La));
     printf("END = %d\n", La->end->val);
 
-    printf("\nNumeros de elementos: %d\n", LinkedList_numero_elem(La));
-    LinkedList_print(La);
+    printf("Numeros de elementos: %d\n\n", LinkedList_numero_elem(La));
 
+    //Removendo um elemento da lista(A)
+    printf("Removendo um elemento da Lista A:\n");
     LinkedList_rem(La, 20);
-    printf("\nNumeros de elementos: %d\n", LinkedList_numero_elem(La));
+    printf("Numeros de elementos: %d\n", LinkedList_numero_elem(La));
     LinkedList_print(La);
 
+    ////Removendo 4 elementos da lista(A)
+    printf("\nRemovendo 4 elementos da Lista A:\n");
     LinkedList_rem(La, 10);
     LinkedList_rem(La, 2);
     LinkedList_rem(La, 4);
     LinkedList_rem(La, 5);
-    printf("\nNumeros de elementos: %d\n", LinkedList_numero_elem(La));
     LinkedList_print(La);
+    printf("Numeros de elementos: %d\n\n", LinkedList_numero_elem(La));
 
 
 
+    //adicionando um elemento no começo da lista(A)
+    printf("Adicionando um elemento no comeco da Lista A:\n");
     LinkedList_add_first(La, 8);
-
-    printf("\nNumeros de elementos: %d\n", LinkedList_numero_elem(La));
     LinkedList_print(La);
+    printf("Numeros de elementos: %d\n\n", LinkedList_numero_elem(La));
 
 
+    //adicionando elementos no final da lista(B)
+    printf("Lista B:\n");
     LinkedList_add_last(Lb, 5);
     LinkedList_add_last(Lb, 15);
     LinkedList_add_last(Lb, 50);
+    LinkedList_print(Lb);
 
+    //adicionando a lista(B) no final da lista(A)
+    printf("\nLinkedList_append(La, Lb):\n");
     LinkedList_append(La, Lb);
     LinkedList_print(La);
 
+    printf("\nLinked_copia_inverte(La, Lc);\n");
     Linked_copia_inverte(La, Lc);
     LinkedList_print(Lc);
 
 
+    //imprime as Lista A e a Lista B na tela
+    printf("\nLista A: ");
     LinkedList_print(La);
+    printf("Lista B: ");
     LinkedList_print(Lb);
-    //LinkedList_concatena(La,Lb);
+    LinkedList_transforma(La, Lb, Lc);
+
+    printf("\nLista C: ");
+    LinkedList_print(Lc);
+    printf("\nLista A: ");
+    LinkedList_print(La);
+    printf("Lista B: ");
+    LinkedList_print(Lb);
+
+
+//    printf("\nLinkedList_concatena(La,Lb);\n");
+//    Lc = LinkedList_concatena(La,Lb);
+//    LinkedList_print(Lc);
+//
+//
+//    //imprime as Lista A e a Lista B na tela
+//    printf("\nLista A: ");
+//    LinkedList_print(La);
+//    printf("Lista B: ");
+//    LinkedList_print(Lb);
 
 //    printf("elemento 1 = %d\n", LinkedList_PrintBegin(La));
 //    printf("elemento %d = %d\n", La->contador, LinkedList_PrintEnd(La));
