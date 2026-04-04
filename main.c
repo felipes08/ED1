@@ -264,6 +264,10 @@ void LinkedList_transforma(LinkedList *L1, LinkedList *L2, LinkedList *L3)
 
 {
 
+    if(L1->begin != NULL)
+    {
+
+    }
     L3->begin = L1->begin;
     L1->end->next = L2->begin;
     L3->end = L2->end;
