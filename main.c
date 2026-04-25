@@ -1,4 +1,3 @@
-//testing
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -7,6 +6,7 @@
 typedef struct _node {
     int val;
     struct _node *next;
+    struct _node *prev;
 } Node;
 
 
@@ -24,6 +24,7 @@ Node *Node_create(int val) {
     Node *node = (Node*) calloc(1, sizeof(Node));
     node->val = val;
     node->next = NULL;
+    node->prev = NULL;
     return node;
 }
 
@@ -50,6 +51,8 @@ void LinkedList_add_first(LinkedList *L, int val) {
 
     } else {
         p->next = L->begin;
+        //p->next->prev = p;
+        L->begin->prev = p;
         L->begin = p;
     }
     L->contador++;
@@ -86,7 +89,7 @@ int LinkedList_numero_elem(LinkedList *L) {
 void LinkedList_rem(LinkedList *L, int valor) {
 
     Node *pos=NULL;
-    Node *prev=NULL;
+    Node *prev_rem=NULL;
 
     if (L->begin != NULL)       // A lista não está vazia
     {
@@ -104,7 +107,8 @@ void LinkedList_rem(LinkedList *L, int valor) {
             else  //remover o primeiro elmento
             {
                 pos = L->begin;
-                L->begin = pos->next;
+                L->begin = L->begin->next;
+                L->begin->prev = NULL;
                 free(pos);
                 L->contador--;
 
@@ -113,20 +117,21 @@ void LinkedList_rem(LinkedList *L, int valor) {
        else  //nao achou o primeiro elemento da lista
        {
             pos=L->begin;
-            while ((pos!=NULL)&& (pos-> val!=valor))
+            while ((pos!=NULL) && (pos-> val!=valor))
             {
-                prev=pos;
+                prev_rem=pos;
                 pos=pos->next;
             } // chegou ao final ou encontrou
 
             if(pos!=NULL) //encontrou o elemento
             {
-                prev->next = pos->next;
+                prev_rem->next = pos->next;
+                pos->next->prev = prev_rem;
                 free(pos);
                 L->contador--;
-                if(prev->next == NULL) //era o último elemento
+                if(prev_rem->next == NULL) //era o último elemento
                 {
-                    L->end = prev;
+                    L->end = prev_rem;
                 }
             }
        }
@@ -142,8 +147,11 @@ void LinkedList_add_last(LinkedList *L, int val) {
 
         p->next = L->begin;
         L->begin = p;
+        L->end = p;
     } else {
+        p->prev = L->end;
         L->end->next = p;
+        L->end = p;
     }
     L->end = p;
     L->contador++;
@@ -315,6 +323,35 @@ void LinkedList_merge(LinkedList *L1, LinkedList *L2, LinkedList *L3)
     }
 }
 
+void LinkedList_printPrev(LinkedList *L)
+{
+    Node *p = L->begin;
+
+
+    if(L != NULL)
+    {
+        printf("Lista: ");
+        while(p != NULL)
+        {
+            printf("\nVal: %d", p->val);
+            printf("\nPrev: ");
+            if(p->prev == NULL)
+            {
+                printf("NULL \n");
+                p = p->next;
+            }
+            else{
+            printf("%d \n", p->prev->val);
+            p = p->next;
+            }
+
+        }
+        printf("\n");
+
+    }
+    printf("NULL");
+}
+
 
 int main (){
 
@@ -379,6 +416,7 @@ int main (){
     printf("Lista C: ");
     LinkedList_print(Lc);
 
+
         //adicionando a lista(B) no final da lista(A)
 //    printf("\nLinkedList_append(La, Lb):\n");
 //    LinkedList_append(La, Lb);
@@ -428,6 +466,7 @@ int main (){
     LinkedList_merge(La, Lb, Lc);
     printf("Lista C: ");
     LinkedList_print(Lc);
+    LinkedList_printPrev(Lc);
 
 
 
